@@ -41,6 +41,7 @@ const createWindow = () => {
   ipcMain.on('extract-zip', (event) => {
     console.log("Extracting: " + screens.source);
     screens.extract();
+    screens.makeDirectories();
     screens.sort();
     event.sender.send('file-extracted');
     screens.resest();
@@ -121,25 +122,55 @@ class VizScreens {
     }
   }
 
+  // sort() {
+  //   console.log("Sorting ...")
+
+  //   //passsing directoryPath and callback function
+  //   fs.readdir(this.dest, function (err, files) {
+  //     //handling error
+  //     if (err) {
+  //       return console.log('Unable to scan directory: ' + err);
+  //     }
+  //     //listing all files using forEach
+  //     files.forEach(function (file) {
+  //       // Do whatever you want to do with the file
+  //       console.log(file);
+  //     });
+  //   });
+  // }
+
   sort() {
-    console.log("Sorting ...")
-    //passsing directoryPath and callback function
-    fs.readdirSync(this.dest, function (err, files) {
-      //handling error
+    console.log("Sorting...");
+    fs.readdirSync(this.dest, (err, files) => {
       if (err) {
         return console.log('Unable to scan directory: ' + err);
       }
-      //listing all files using forEach
-      files.forEach(function (file) {
-        // Do whatever you want to do with the file
+      files.forEach((file) => {
         console.log(file);
       });
-    });
+    })
   }
 
   resest() {
     this.dest = null;
     this.src = null;
+  }
+
+  makeDirectory(arg) {
+    let dir = path.join(this.dest, arg);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+      console.log("Dir Created: " + dir);
+    } else {
+      console.log("Dir Exists: " + dir);
+    }
+  }
+
+  makeDirectories() {
+    this.makeDirectory("ff");
+    this.makeDirectory("mini");
+    this.makeDirectory("misc");
+    this.makeDirectory("sqz");
   }
 }
 
