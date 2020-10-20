@@ -90,3 +90,5 @@ out/
 
 # unzip
 data/
+zip/
+*.zip
