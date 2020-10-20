@@ -23,7 +23,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'html/main.html'));
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -49,7 +49,7 @@ const createWindow = () => {
   ipcMain.on('open-dest-dialog', (event) => {
     console.log("Selecting destination ...");
     screens.destination = dialog.showOpenDialogSync(mainWindow, { title: "Select destination folder", properties: ['openDirectory'] });
-    event.sender.send('folder-selected', screens.destination);    
+    event.sender.send('folder-selected', screens.destination);
   });
 
   ///////////////////////////////////////////////////////////////////
@@ -123,6 +123,18 @@ class VizScreens {
 
   sort() {
     console.log("Sorting ...")
+    //passsing directoryPath and callback function
+    fs.readdirSync(this.dest, function (err, files) {
+      //handling error
+      if (err) {
+        return console.log('Unable to scan directory: ' + err);
+      }
+      //listing all files using forEach
+      files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file);
+      });
+    });
   }
 
   resest() {
