@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Viz Screens v1.0.0 (build 1)</title>
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <style>
+        html {
+            overflow: hidden;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 8pt;
+        }
+
+        body {
+            background-color: #008542;
+            color: white;
+        }
+
+        .center {
+            width: 100vw;
+            height: 100vh;
+            padding: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <div>
+            <p>
+                Source: 
+                <span id="ZipFileLocation">-</span>
+                <button id="SelectZip">Browse</button>
+                <button id="ExtractZip">Extract</button>
+            </p>
+        </div>
+        <div>
+            <p>
+                Destination: 
+                <span id="UnZipFileLocation">-</span>
+                <button id="SelectUnZip">Set</button>
+            </p>
+        </div>
+        <div>
+            <small>Viz Screens v1.0.0 (build 1)</small>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron')
+        var path = require('path');
+
+        const BrowseZipBtn = document.getElementById('SelectZip');
+        const ExtractZipBtn = document.getElementById('ExtractZip');
+        const BrowseUnZipBtn = document.getElementById('SelectUnZip');
+
+        BrowseZipBtn.addEventListener('click', function () {
+            console.log("Browse Button Clicked")
+            ipcRenderer.send('open-dialog')
+        });
+
+        ipcRenderer.on('file-selected', (event, arg) => {
+            let filename = path.basename(arg)
+            document.getElementById('ZipFileLocation').innerHTML = filename
+            console.log(filename + " - " + arg)
+        });
+
+        ExtractZipBtn.addEventListener('click', () => {
+            console.log("Extract Button Clicked")
+            ipcRenderer.send('extract-zip')
+        });
+
+        ipcRenderer.on('file-extracted', (event) => {
+            document.getElementById('ZipFileLocation').innerHTML = "File Extracted."
+        });
+
+        BrowseUnZipBtn.addEventListener('click', () => {
+            console.log("Browse Button Clicked")
+            ipcRenderer.send('open-dest-dialog')
+        });
+
+        ipcRenderer.on('folder-selected', (event, arg) => {
+            document.getElementById('UnZipFileLocation').innerHTML = arg
+            console.log(filename + " - " + arg)
+        });
+
+    </script>
+</body>
+
+</html>

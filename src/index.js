@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const { electron } = require('process');
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -9,8 +11,8 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 640,
+    height: 360,
     resizable: false,
     autoHideMenuBar: true,
     titleBarStyle: "default",
@@ -21,10 +23,39 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'html/form.html'));
+  mainWindow.loadFile(path.join(__dirname, 'html/main.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  ///////////////////////////////////////////////////////////////////
+  // MY CODE BEGINS
+  ///////////////////////////////////////////////////////////////////
+
+  ipcMain.on('open-dialog', (event) => {
+    console.log("Selecting source ...");
+    screens.source = dialog.showOpenDialogSync(mainWindow, { title: "Select Zip file", properties: ['openFile'] });
+    event.sender.send('file-selected', screens.source);
+  });
+
+  ipcMain.on('extract-zip', (event) => {
+    console.log("Extracting: " + screens.source);
+    screens.extract();
+    screens.sort();
+    event.sender.send('file-extracted');
+    screens.resest();
+  });
+
+  ipcMain.on('open-dest-dialog', (event) => {
+    console.log("Selecting destination ...");
+    screens.destination = dialog.showOpenDialogSync(mainWindow, { title: "Select destination folder", properties: ['openDirectory'] });
+    event.sender.send('folder-selected', screens.destination);    
+  });
+
+  ///////////////////////////////////////////////////////////////////
+  // MY CODE ENDS
+  ///////////////////////////////////////////////////////////////////
+
 };
 
 // This method will be called when Electron has finished
@@ -51,3 +82,57 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+///////////////////////////////////////////////////////////////////
+// MY CODE BEGINS
+///////////////////////////////////////////////////////////////////
+
+const fs = require('fs');
+const extractzip = require('extract-zip');
+
+class VizScreens {
+  constructor() {
+    this.dest = null;
+    this.src = null;
+  }
+
+  set destination(arg) {
+    this.dest = arg[0];
+  }
+
+  get destination() {
+    return this.dest;
+  }
+
+  set source(arg) {
+    this.src = arg[0];
+  }
+
+  get source() {
+    return this.src;
+  }
+
+  extract() {
+    try {
+      extractzip(this.src, { dir: this.dest })
+      console.log('Extraction complete')
+    } catch (err) {
+      console.log("An error occured extracting Zip")
+    }
+  }
+
+  sort() {
+    console.log("Sorting ...")
+  }
+
+  resest() {
+    this.dest = null;
+    this.src = null;
+  }
+}
+
+let screens = new VizScreens()
+
+///////////////////////////////////////////////////////////////////
+// MY CODE ENDS
+///////////////////////////////////////////////////////////////////
