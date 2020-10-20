@@ -127,9 +127,28 @@ class VizScreens {
     let files = fs.readdirSync(this.dest);
     let i = 0;
     files.forEach((file) => {
-      let stats = fs.statSync(path.join(this.dest, file));
+      let current_path = path.join(this.dest, file);
+      let new_path;
+      let stats = fs.statSync(current_path);
+
       if (!stats.isDirectory()) {
-        console.log("MOVED: " + file)
+        if (file.includes("1920x1080")) {
+          new_path = path.join(this.dest, "ff", file);
+          fs.renameSync(current_path, new_path);
+          console.log("MOVED: " + file)
+        } else if (file.includes("1740x1074")) {
+          new_path = path.join(this.dest, "sqz", file);
+          fs.renameSync(current_path, new_path);
+          console.log("MOVED: " + file)
+        } else if (file.includes("1214x478")) {
+          new_path = path.join(this.dest, "mini", file);
+          fs.renameSync(current_path, new_path);
+          console.log("MOVED: " + file)
+        } else {
+          new_path = path.join(this.dest, "misc", file);
+          fs.renameSync(current_path, new_path);
+          console.log("MOVED: " + file)
+        }
       } else {
         console.log("SKIPPED: " + file)
       }
