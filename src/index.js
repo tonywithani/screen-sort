@@ -40,7 +40,7 @@ const createWindow = () => {
 
   ipcMain.on('extract-zip', (event) => {
     console.log("Extracting: " + screens.source);
-    screens.AdmExtract();
+    screens.extract();
     screens.makeDirectories();
     screens.sort();
     // event.sender.send('file-extracted');
@@ -96,6 +96,7 @@ class VizScreens {
   constructor() {
     this.dest = null;
     this.src = null;
+    this.zip_length = null;
   }
 
   set destination(arg) {
@@ -114,97 +115,48 @@ class VizScreens {
     return this.src;
   }
 
+
   extract() {
-    try {
-      extractzip(this.src, { dir: this.dest })
-      console.log('Extraction complete')
-    } catch (err) {
-      console.log("An error occured extracting Zip")
+    let zip = new AdmZip(this.src);
+    this.zip_length = zip.getEntries()
+    zip.extractAllTo(this.dest, true);
+  }
+
+  sort() {
+    console.log("Sorting...");
+    let files = fs.readdirSync(this.dest);
+    let i = 0;
+    files.forEach((file) => {
+      let stats = fs.statSync(path.join(this.dest, file));
+      if (!stats.isDirectory()) {
+        console.log("MOVED: " + file)
+      } else {
+        console.log("SKIPPED: " + file)
+      }
+    });
+  }
+
+  resest() {
+    this.dest = null;
+    this.src = null;
+  }
+
+  makeDirectory(arg) {
+    let dir = path.join(this.dest, arg);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+      console.log("Dir Created: " + dir);
+    } else {
+      console.log("Dir Exists: " + dir);
     }
   }
 
-  // Works but doesn't calculate the length of the array
-  async extract2() {
-    try {
-      await extractzip(this.src, { dir: this.dest })
-      console.log('Extraction complete')
-    } catch (err) {
-      console.log("An error occured extracting Zip")
-    } finally {
-      this.sort()
-    }
+  makeDirectories() {
+    this.makeDirectory("ff");
+    this.makeDirectory("mini");
+    this.makeDirectory("misc");
+    this.makeDirectory("sqz");
   }
-
-  AdmExtract() {
-  let zip = new AdmZip(this.src);
-  zip.extractAllTo(this.dest, true);
-}
-
-// sort() {
-//   console.log("Sorting ...")
-
-//   //passsing directoryPath and callback function
-//   fs.readdir(this.dest, function (err, files) {
-//     //handling error
-//     if (err) {
-//       return console.log('Unable to scan directory: ' + err);
-//     }
-//     //listing all files using forEach
-//     files.forEach(function (file) {
-//       // Do whatever you want to do with the file
-//       console.log(file);
-//     });
-//   });
-// }
-
-// sort() {
-//   console.log("Sorting...");
-//   fs.readdir(this.dest, (err, files) => {
-//     if (err) {
-//       return console.log('Unable to scan directory: ' + err);
-//     }
-//     files.forEach((file) => {
-//       console.log(file);
-//     });
-//   })
-// }
-
-
-sort() {
-  console.log("Sorting...");
-  fs.readdir(this.dest, (err, files) => {
-    if (err) throw err;
-
-    // let file;
-    // for (file of files) {
-    //   console.log(file);
-    // }
-
-    files.forEach( file => console.log(file)); // Does read files just created.
-  })
-}
-
-resest() {
-  this.dest = null;
-  this.src = null;
-}
-
-makeDirectory(arg) {
-  let dir = path.join(this.dest, arg);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-    console.log("Dir Created: " + dir);
-  } else {
-    console.log("Dir Exists: " + dir);
-  }
-}
-
-makeDirectories() {
-  this.makeDirectory("ff");
-  this.makeDirectory("mini");
-  this.makeDirectory("misc");
-  this.makeDirectory("sqz");
-}
 }
 
 let screens = new VizScreens()
