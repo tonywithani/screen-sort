@@ -2,52 +2,79 @@
 <html>
 
 <head>
-    <title>Viz Screens v1.0.0 (build 1)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Viz Screens v1.0.0 (build 8)</title>
     <link rel="shortcut icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <style>
         html {
             overflow: hidden;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: 8pt;
         }
 
-        body {
+        /* body {
             background-color: #008542;
-            color: white;
-        }
-
-        .center {
-            width: 100vw;
-            height: 100vh;
-            padding: 10%;
-        }
+        } */
     </style>
 </head>
 
 <body>
-    <div class="center">
-        <div>
-            <p>
-                Source:
-                <span id="ZipFileLocation">-</span>
-                <button id="SelectZip">Browse</button>
-            </p>
+    <section>
+        <div class="container">
+            <div class="columns is-mobile">
+                <div class="column is-1"></div>
+                <div class="column is-10">
+                    <div class="control">
+                        <p>&nbsp;</p>
+                        <h1 class="title is-4">Viz Screens</h1>
+                        <p class="subtitle is-6">v0.0.1 (build 8)</p>
+                    </div>
+                </div>
+                <div class="column is-1"></div>
+            </div>
         </div>
-        <div>
-            <p>
-                Destination:
-                <span id="UnZipFileLocation">-</span>
-                <button id="SelectUnZip">Set</button>
-            </p>
+    </section>
+    <section>
+        <div class="container">
+            <div class="columns is-mobile">
+                <div class="column is-1"></div>
+                <div class="column is-7">
+                    <div class="control">
+                        <input id="ZipFileLocation" class="input is-small" type="text" value="Find Zip file." readonly>
+                    </div>
+                </div>
+                <div class="column"><a id="SelectZip" class="button is-fullwidth is-dark is-small">Browse</a></div>
+                <div class="column is-1"></div>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column is-1"></div>
+                <div class="column is-7">
+                    <div class="control">
+                        <input id="UnZipFileLocation" class="input is-small" type="text"
+                            value="Select output destination." readonly>
+                    </div>
+                </div>
+                <div class="column">
+                    <a id="SelectUnZip" class="button is-fullwidth is-dark is-small">Set</a>
+                </div>
+                <div class="column is-1"></div>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column is-1"></div>
+                <div class="column is-7">
+                    <a id="ExtractZip" class="button is-fullwidth is-dark is-small">Extract</a></div>
+                <div class="column"></div>
+                <div class="column is-1"></div>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column is-1"></div>
+                <div class="column is-7">
+                    <a id="ShowFolder" class="button is-fullwidth is-text is-small">Show Folder</a></div>
+                <div class="column"></div>
+                <div class="column is-1"></div>
+            </div>
         </div>
-        <div>
-            <button id="ExtractZip">Extract</button>
-        </div>
-        <div>
-            <small>Viz Screens v1.0.0 (build 1)</small>
-        </div>
-    </div>
-
+    </section>
     <script>
         const { ipcRenderer } = require('electron')
         var path = require('path');
@@ -55,6 +82,7 @@
         const BrowseZipBtn = document.getElementById('SelectZip');
         const ExtractZipBtn = document.getElementById('ExtractZip');
         const BrowseUnZipBtn = document.getElementById('SelectUnZip');
+        const ShowFolderBtn = document.getElementById('ShowFolder');
 
         BrowseZipBtn.addEventListener('click', function () {
             console.log("Browse Button Clicked")
@@ -63,7 +91,7 @@
 
         ipcRenderer.on('file-selected', (event, arg) => {
             let filename = path.basename(arg)
-            document.getElementById('ZipFileLocation').innerHTML = filename
+            document.getElementById('ZipFileLocation').value = filename
             console.log(filename + " - " + arg)
         });
 
@@ -73,7 +101,7 @@
         });
 
         ipcRenderer.on('file-extracted', (event) => {
-            document.getElementById('ZipFileLocation').innerHTML = "File Extracted."
+            document.getElementById('ZipFileLocation').vaule = "File Extracted."
         });
 
         BrowseUnZipBtn.addEventListener('click', () => {
@@ -82,8 +110,13 @@
         });
 
         ipcRenderer.on('folder-selected', (event, arg) => {
-            document.getElementById('UnZipFileLocation').innerHTML = arg
+            document.getElementById('UnZipFileLocation').value = arg
             console.log(filename + " - " + arg)
+        });
+
+        ShowFolderBtn.addEventListener('click', () => {
+            console.log("Show Folder Button Clicked")
+            ipcRenderer.send('show-folder')
         });
 
     </script>

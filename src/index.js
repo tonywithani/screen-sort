@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { electron } = require('process');
+const openExplorer = require('open-file-explorer');
+
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -24,7 +26,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
+  
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 
@@ -52,6 +54,15 @@ const createWindow = () => {
     screens.destination = dialog.showOpenDialogSync(mainWindow, { title: "Select destination folder", properties: ['openDirectory'] });
     event.sender.send('folder-selected', screens.destination);
   });
+
+
+  ipcMain.on('show-folder', (event) => {
+    console.log("Opening Folder: " + screens.destination);
+    openExplorer(screens.destination, err => {
+      if (err) throw console.log(err);
+    });
+  });
+
 
   ///////////////////////////////////////////////////////////////////
   // MY CODE ENDS
