@@ -26,7 +26,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  
+
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 
@@ -37,14 +37,20 @@ const createWindow = () => {
   ipcMain.on('open-dialog', (event) => {
     console.log("Selecting source ...");
     screens.source = dialog.showOpenDialogSync(mainWindow, { title: "Select Zip file", properties: ['openFile'] });
+    console.log(screens.source);
     event.sender.send('file-selected', screens.source);
+    event.sender.send('file-extracted', screens.source);
   });
 
   ipcMain.on('extract-zip', (event) => {
     console.log("Extracting: " + screens.source);
+    if (screens.source == null || screens.source == undefined || screens.destination == null || screens.destination == undefined) {
+      return console.log("ERROR: Can't extraxt Zip. No Zip file or no destination folder selected.");
+    }
     screens.extract();
     screens.makeDirectories();
     screens.sort();
+    event.sender.send('file-extracted', "File extracted.");
     // event.sender.send('file-extracted');
     // screens.resest();
   });
@@ -52,15 +58,24 @@ const createWindow = () => {
   ipcMain.on('open-dest-dialog', (event) => {
     console.log("Selecting destination ...");
     screens.destination = dialog.showOpenDialogSync(mainWindow, { title: "Select destination folder", properties: ['openDirectory'] });
+    console.log(screens.destination);
     event.sender.send('folder-selected', screens.destination);
+    event.sender.send('file-extracted', screens.destination);
+
   });
 
 
   ipcMain.on('show-folder', (event) => {
-    console.log("Opening Folder: " + screens.destination);
+    if (screens.destination != null) {
+      console.log("Opening Folder: " + screens.destination);
+    } else {
+      console.log("Opening Folder: This PC");
+    }
+    
     openExplorer(screens.destination, err => {
       if (err) throw console.log(err);
     });
+    event.sender.send('file-extracted', "Destination folder opened.");
   });
 
 
@@ -107,11 +122,16 @@ class VizScreens {
   constructor() {
     this.dest = null;
     this.src = null;
+    this.zip = null;
     this.zip_length = null;
   }
 
   set destination(arg) {
-    this.dest = arg[0];
+    if (arg !== undefined) {
+      this.dest = arg[0];
+    } else {
+      this.dest = arg;
+    }
   }
 
   get destination() {
@@ -119,7 +139,12 @@ class VizScreens {
   }
 
   set source(arg) {
-    this.src = arg[0];
+    if (arg !== undefined) {
+      this.src = arg[0];
+      this.zip = new AdmZip(this.src);
+    } else {
+      this.src = arg;
+    }
   }
 
   get source() {
@@ -128,9 +153,9 @@ class VizScreens {
 
 
   extract() {
-    let zip = new AdmZip(this.src);
-    this.zip_length = zip.getEntries()
-    zip.extractAllTo(this.dest, true);
+    // let zip = new AdmZip(this.src);    
+    this.zip_length = this.zip.getEntries()
+    this.zip.extractAllTo(this.dest, true);
   }
 
   sort() {
