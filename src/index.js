@@ -26,6 +26,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.setTitle(process.env.npm_package_productName + " v" + process.env.npm_package_version + " (Build " + process.env.npm_package_config_tz_build + ")");
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -71,7 +72,7 @@ const createWindow = () => {
     } else {
       console.log("Opening Folder: This PC");
     }
-    
+
     openExplorer(screens.destination, err => {
       if (err) throw console.log(err);
     });

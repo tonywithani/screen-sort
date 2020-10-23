@@ -1,6 +1,6 @@
 {
   "name": "viz-screens",
-  "productName": "viz-screens",
+  "productName": "Screen Sort",
   "version": "0.0.1",
   "description": "My Electron application description",
   "main": "src/index.js",
@@ -42,6 +42,9 @@
           "config": {}
         }
       ]
+    },
+    "tz": {
+      "build": "10"
     }
   },
   "dependencies": {

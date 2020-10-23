@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Viz Screens v1.0.0 (build 8)</title>
+    <title></title>
     <link rel="shortcut icon" href="img/favicon.ico">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"> -->
     <link rel="stylesheet" href="css/mystyle.css">
@@ -13,11 +13,8 @@
             overflow: hidden;
         }
 
-        /* body {
-            background-color: #008542;
-        } */
         .max-vh {
-            min-height: calc(100vh - 59px);
+            min-height: calc(100vh - 59px - 1.5rem);
         }
 
         .footer-vh {
@@ -26,70 +23,70 @@
             color: white;
         }
     </style>
+
+    <!--load all styles -->
+    <script defer src="js/fontawesome/js/all.js"></script>
 </head>
 
 <body>
     <div class="max-vh">
-        <section>
+        <section class="mt-5 mb-4 ml-6 mr-6">
             <div class="container">
                 <div class="columns is-mobile">
-                    <div class="column is-1"></div>
-                    <div class="column is-10">
+                    <div class="column is-12">
                         <div class="control">
-                            <p>&nbsp;</p>
-                            <h1 class="title is-4">Viz Screens</h1>
-                            <p class="subtitle is-6">v0.0.1 (build 8)</p>
+                            <h1 id="ProductName" class="title is-4">Screen Sort</h1>
                         </div>
                     </div>
-                    <div class="column is-1"></div>
                 </div>
             </div>
         </section>
-        <section>
+        <section class="ml-6 mr-6">
             <div class="container">
                 <div class="columns is-mobile">
-                    <div class="column is-1"></div>
-                    <div class="column is-7">
-                        <div class="control">
-                            <input id="ZipFileLocation" class="input is-small" type="text" value="Find Zip file."
-                                readonly>
+                    <div class="column is-9">
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input id="ZipFileLocation" class="input is-small" type="text"
+                                    placeholder="Select Zip File" readonly>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-file-archive"></i>
+                                </span>
+                            </p>
                         </div>
                     </div>
-                    <div class="column"><a id="SelectZip" class="button is-fullwidth is-dark is-small">Browse</a></div>
-                    <div class="column is-1"></div>
+                    <div class="column"><a id="SelectZip" class="button is-fullwidth is-light is-small">Browse</a></div>
                 </div>
                 <div class="columns is-mobile">
-                    <div class="column is-1"></div>
-                    <div class="column is-7">
-                        <div class="control">
-                            <input id="UnZipFileLocation" class="input is-small" type="text"
-                                value="Select output destination." readonly>
+                    <div class="column is-9">
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input id="UnZipFileLocation" class="input is-small" type="text"
+                                    placeholder="Select Output Destination" readonly>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-folder"></i>
+                                </span>
+                            </p>
                         </div>
                     </div>
                     <div class="column">
-                        <a id="SelectUnZip" class="button is-fullwidth is-dark is-small">Set</a>
+                        <a id="SelectUnZip" class="button is-fullwidth is-light is-small">Set</a>
                     </div>
-                    <div class="column is-1"></div>
                 </div>
                 <div class="columns is-mobile">
-                    <div class="column is-1"></div>
-                    <div class="column is-7">
+                    <div class="column is-9">
                         <a id="ExtractZip" class="button is-fullwidth is-dark is-small">Extract</a></div>
-                    <div class="column"><a id="ShowFolder" class="button is-fullwidth is-text is-small">Show Folder</a>
-                    </div>
-                    <div class="column is-1"></div>
+                    <div class="column"></div>
+
                 </div>
             </div>
         </section>
     </div>
     <footer class="footer footer-vh">
-        <div class="columns is-mobile">
-            <div class="column is-1"></div>
-            <div class="column has-text-centered">
-                <p id="Messages">Insert text here ... Insert text here ... Insert text here ... Insert text here ...
-                </p>
+        <div class="columns is-mobile ml-5 mr-5">
+            <div class="column is-12">
+                <p id="Messages" class="is-size-7"></p>
             </div>
-            <div class="column is-1"></div>
         </div>
     </footer>
     <script>
@@ -99,7 +96,7 @@
         const BrowseZipBtn = document.getElementById('SelectZip');
         const ExtractZipBtn = document.getElementById('ExtractZip');
         const BrowseUnZipBtn = document.getElementById('SelectUnZip');
-        const ShowFolderBtn = document.getElementById('ShowFolder');
+        const ShowFolderBtn = document.getElementById('UnZipFileLocation');
 
         BrowseZipBtn.addEventListener('click', function () {
             console.log("Browse Button Clicked")
@@ -135,7 +132,6 @@
             console.log("Show Folder Button Clicked")
             ipcRenderer.send('show-folder')
         });
-
     </script>
 </body>
 
