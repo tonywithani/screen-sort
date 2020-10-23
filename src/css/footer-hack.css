@@ -1,0 +1,7 @@
+.max-vh {
+    min-height: calc(100vh - 59px - 1.5rem);
+}
+
+.footer-vh {
+    height: 70px;
+}

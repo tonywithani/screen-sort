@@ -27,6 +27,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.setTitle(process.env.npm_package_productName + " v" + process.env.npm_package_version + " (Build " + process.env.npm_package_config_tz_build + ")");
+  mainWindow.setMenu(null);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -53,7 +54,7 @@ const createWindow = () => {
     screens.sort();
     event.sender.send('file-extracted', "File extracted.");
     // event.sender.send('file-extracted');
-    // screens.resest();
+
   });
 
   ipcMain.on('open-dest-dialog', (event) => {
@@ -79,6 +80,11 @@ const createWindow = () => {
     event.sender.send('file-extracted', "Destination folder opened.");
   });
 
+  ipcMain.on('reset-app', (event) => {
+    screens.resest();
+    console.log("Reset Complete.");
+    event.sender.send('app-reset');
+  });
 
   ///////////////////////////////////////////////////////////////////
   // MY CODE ENDS
@@ -154,7 +160,6 @@ class VizScreens {
 
 
   extract() {
-    // let zip = new AdmZip(this.src);    
     this.zip_length = this.zip.getEntries()
     this.zip.extractAllTo(this.dest, true);
   }
@@ -195,6 +200,8 @@ class VizScreens {
   resest() {
     this.dest = null;
     this.src = null;
+    this.zip = null;
+    this.zip_length = null;
   }
 
   makeDirectory(arg) {

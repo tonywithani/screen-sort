@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="is-clipped">
 
 <head>
     <meta charset="utf-8">
@@ -8,28 +8,16 @@
     <link rel="shortcut icon" href="img/favicon.ico">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"> -->
     <link rel="stylesheet" href="css/mystyle.css">
-    <style>
-        html {
-            overflow: hidden;
-        }
-
-        .max-vh {
-            min-height: calc(100vh - 59px - 1.5rem);
-        }
-
-        .footer-vh {
-            height: 70px;
-            background-color: grey;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="css/footer-hack.css">
 
     <!--load all styles -->
     <script defer src="js/fontawesome/js/all.js"></script>
 </head>
 
-<body>
+<body class="has-background-white-bis">
+    <!-- Sticky Footer -->
     <div class="max-vh">
+        <!-- Header -->
         <section class="mt-5 mb-4 ml-6 mr-6">
             <div class="container">
                 <div class="columns is-mobile">
@@ -41,6 +29,8 @@
                 </div>
             </div>
         </section>
+        <!-- Header End -->
+        <!-- Form -->
         <section class="ml-6 mr-6">
             <div class="container">
                 <div class="columns is-mobile">
@@ -55,7 +45,8 @@
                             </p>
                         </div>
                     </div>
-                    <div class="column"><a id="SelectZip" class="button is-fullwidth is-light is-small">Browse</a></div>
+                    <div class="column"><a id="SelectZip" class="button is-fullwidth is-warning is-small">Browse</a>
+                    </div>
                 </div>
                 <div class="columns is-mobile">
                     <div class="column is-9">
@@ -70,25 +61,35 @@
                         </div>
                     </div>
                     <div class="column">
-                        <a id="SelectUnZip" class="button is-fullwidth is-light is-small">Set</a>
+                        <a id="SelectUnZip" class="button is-fullwidth is-warning is-small">Set</a>
                     </div>
                 </div>
                 <div class="columns is-mobile">
                     <div class="column is-9">
-                        <a id="ExtractZip" class="button is-fullwidth is-dark is-small">Extract</a></div>
-                    <div class="column"></div>
-
+                        <a id="ExtractZip" class="button is-fullwidth is-success is-small">Extract</a></div>
+                    <div class="column">
+                        <button id="Reset" class="button is-danger is-outlined is-small is-fullwidth">
+                            <span>Reset</span>
+                            <span class="icon is-small">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
-    <footer class="footer footer-vh">
+    <!-- Form End -->
+    <!-- Footer -->
+    <footer class="footer footer-vh has-background-grey-lighter has-text-grey-darker">
         <div class="columns is-mobile ml-5 mr-5">
             <div class="column is-12">
                 <p id="Messages" class="is-size-7"></p>
             </div>
         </div>
     </footer>
+    <!-- Footer End -->
+    <!-- Sticky Footer End -->
     <script>
         const { ipcRenderer } = require('electron')
         var path = require('path');
@@ -97,6 +98,7 @@
         const ExtractZipBtn = document.getElementById('ExtractZip');
         const BrowseUnZipBtn = document.getElementById('SelectUnZip');
         const ShowFolderBtn = document.getElementById('UnZipFileLocation');
+        const ResetBtn = document.getElementById('Reset');
 
         BrowseZipBtn.addEventListener('click', function () {
             console.log("Browse Button Clicked")
@@ -132,6 +134,18 @@
             console.log("Show Folder Button Clicked")
             ipcRenderer.send('show-folder')
         });
+
+        ResetBtn.addEventListener('click', function () {
+            console.log("Reset Button Clicked")
+            ipcRenderer.send('reset-app')
+        });
+
+        ipcRenderer.on('app-reset', (event) => {
+            document.getElementById('ZipFileLocation').value = "";
+            document.getElementById('UnZipFileLocation').value = "";
+            document.getElementById('Messages').innerHTML = "Reset Complete.";
+        });
+
     </script>
 </body>
 

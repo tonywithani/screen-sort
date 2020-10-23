@@ -92,3 +92,6 @@ out/
 data/
 zip/
 *.zip
+
+# Build
+dist
