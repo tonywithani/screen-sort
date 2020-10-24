@@ -38,7 +38,7 @@ const createWindow = () => {
 
   ipcMain.on('open-dialog', (event) => {
     console.log("Selecting source ...");
-    screens.source = dialog.showOpenDialogSync(mainWindow, { title: "Select Zip file", properties: ['openFile'] });
+    screens.source = dialog.showOpenDialogSync(mainWindow, { title: "Select Zip file", filters: [{ name: 'Archives', extensions: ['zip'] }], properties: ['openFile'] });
     console.log(screens.source);
     event.sender.send('file-selected', screens.source);
     event.sender.send('file-extracted', screens.source);
