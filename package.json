@@ -1,7 +1,7 @@
 {
-  "name": "viz-screens",
+  "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -15,9 +15,15 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "sortscreen.tonywithani.com",
+    "appId": "com.tonywithani.screen-sort",
     "win": {
       "target": "NSIS"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true, 
+      "allowToChangeInstallationDirectory": true
     }
   },
   "keywords": [],
