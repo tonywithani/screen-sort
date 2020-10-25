@@ -3,7 +3,7 @@ const path = require('path');
 const { electron } = require('process');
 const openExplorer = require('open-file-explorer');
 
-
+console.log("Launching " + app.getName() + " v" + app.getVersion());
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -26,7 +26,11 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.setTitle(process.env.npm_package_productName + " v" + process.env.npm_package_version + " (Build " + process.env.npm_package_config_tz_build + ")");
+
+  // Set Window Title
+  mainWindow.setTitle(app.getName() + " v" + app.getVersion());
+
+  // Hide Menu
   mainWindow.setMenu(null);
 
   // Open the DevTools.

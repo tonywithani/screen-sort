@@ -1,7 +1,7 @@
 {
   "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "1.0.0",
+  "version": "0.1.19",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -17,13 +17,15 @@
   "build": {
     "appId": "com.tonywithani.screen-sort",
     "win": {
-      "target": "NSIS"
+      "target": "NSIS",
+      "icon": "./src/img/Icon.png" 
     },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowElevation": true, 
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "installerSidebar": "./src/img/InstallerSideBar.bmp" 
     }
   },
   "keywords": [],
