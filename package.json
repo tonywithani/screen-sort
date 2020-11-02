@@ -1,7 +1,7 @@
 {
   "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Sorts ad screens based on size.",
   "main": "src/index.js",
   "scripts": {
