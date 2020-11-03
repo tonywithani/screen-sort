@@ -1,7 +1,7 @@
 {
   "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "0.1.22",
+  "version": "0.1.29",
   "description": "Sorts ad screens based on size.",
   "main": "src/index.js",
   "scripts": {
@@ -18,14 +18,14 @@
     "appId": "com.tonywithani.screen-sort",
     "win": {
       "target": "NSIS",
-      "icon": "./src/img/Icon.png" 
+      "icon": "./src/img/Icon.png"
     },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
-      "allowElevation": true, 
+      "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerSidebar": "./src/img/InstallerSideBar.bmp" 
+      "installerSidebar": "./src/img/InstallerSideBar.bmp"
     }
   },
   "keywords": [],
@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.16",
+    "electron-log": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
     "extract-zip": "^2.0.1",
     "open-file-explorer": "^1.0.2"

@@ -1,14 +1,25 @@
-///////////////////////////////////////////////////////////////////
-// MY CODE BEGINS
-///////////////////////////////////////////////////////////////////
+'use strict';
+
+/**
+* @name screensort 
+* @fileoverview sortscreen is library to sort TAB Ads according to size.
+*
+* Files arre sorted in 4 folders: ff, mini, misc and sqz.
+*
+* @author Toni Zipevski - https://www.tonywithani.com
+* @since 2020-11-03
+* Website: https://www.tonywithani.com
+*/
 
 const fs = require('fs');
 const path = require('path');
 const extractzip = require('extract-zip');
 var AdmZip = require('adm-zip');
+const log = require('electron-log');
 
 class SortScreens {
   constructor() {
+    log.info('Initialise ... sortscreen.js');
     this.dest = null;
     this.src = null;
     this.zip = null;
@@ -42,12 +53,15 @@ class SortScreens {
 
 
   extract() {
+    console.time('Extract');
     this.zip_length = this.zip.getEntries()
     this.zip.extractAllTo(this.dest, true);
+    console.timeEnd('Extract');
   }
 
   sort() {
-    console.log("Sorting...");
+    console.time('Sort');
+    log.info('Sorting ...')
     let files = fs.readdirSync(this.dest);
     let i = 0;
     files.forEach((file) => {
@@ -59,24 +73,22 @@ class SortScreens {
         if (file.includes("1920x1080")) {
           new_path = path.join(this.dest, "ff", file);
           fs.renameSync(current_path, new_path);
-          console.log("MOVED: " + file)
         } else if (file.includes("1740x1074")) {
           new_path = path.join(this.dest, "sqz", file);
           fs.renameSync(current_path, new_path);
-          console.log("MOVED: " + file)
         } else if (file.includes("1214x478")) {
           new_path = path.join(this.dest, "mini", file);
           fs.renameSync(current_path, new_path);
-          console.log("MOVED: " + file)
         } else {
           new_path = path.join(this.dest, "misc", file);
           fs.renameSync(current_path, new_path);
-          console.log("MOVED: " + file)
         }
+        log.info('Moved: ' + file);
       } else {
-        console.log("SKIPPED: " + file)
+        log.info("Skipped: " + file);
       }
     });
+    console.timeEnd('Sort');
   }
 
   resest() {
@@ -90,22 +102,20 @@ class SortScreens {
     let dir = path.join(this.dest, arg);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
-      console.log("Dir Created: " + dir);
+      log.info("Dir Created: " + dir);
     } else {
-      console.log("Dir Exists: " + dir);
+      log.info("Dir Exists: " + dir);
     }
   }
 
   makeDirectories() {
+    console.time('Make-Directories');
     this.makeDirectory("ff");
     this.makeDirectory("mini");
     this.makeDirectory("misc");
     this.makeDirectory("sqz");
+    console.timeEnd('Make-Directories');
   }
 }
 
 module.exports = SortScreens
-
-///////////////////////////////////////////////////////////////////
-// MY CODE ENDS
-///////////////////////////////////////////////////////////////////
