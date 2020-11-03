@@ -1,7 +1,7 @@
 {
   "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "0.1.32",
+  "version": "0.1.35",
   "description": "Sorts ad screens based on size.",
   "main": "src/index.js",
   "scripts": {
@@ -68,7 +68,6 @@
     "adm-zip": "^0.4.16",
     "electron-log": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
-    "extract-zip": "^2.0.1",
     "open-file-explorer": "^1.0.2"
   },
   "devDependencies": {
