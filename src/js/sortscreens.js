@@ -13,7 +13,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const extractzip = require('extract-zip');
 var AdmZip = require('adm-zip');
 const log = require('electron-log');
 
@@ -50,7 +49,6 @@ class SortScreens {
   get source() {
     return this.src;
   }
-
 
   extract() {
     console.time('Extract');
