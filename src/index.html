@@ -2,6 +2,12 @@
 <html class="is-clipped">
 
 <head>
+    <!-- Start React Includes -->
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <!-- End React Includes -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
@@ -15,91 +21,170 @@
 <body class="has-background-white-bis">
     <!-- Sticky Footer -->
     <div class="max-vh">
-        <!-- Header -->
-        <section class="mt-5 mb-4 ml-6 mr-6">
-            <div class="container">
-                <div class="columns is-mobile">
-                    <div class="column is-12">
-                        <div class="control">
-                            <h1 id="ProductName" class="title is-4">Screen Sort</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Header End -->
+        <!--Header -->
+        <section id="ss-header" class="mt-5 mb-4 ml-6 mr-6"></section>
+        <!--Header End -->
         <!-- Form -->
         <section class="ml-6 mr-6">
             <div class="container">
-                <div class="columns is-mobile">
-                    <div class="column is-9">
-                        <div class="field">
-                            <p class="control has-icons-left">
-                                <input id="ZipFileLocation" class="input is-small" type="text"
-                                    placeholder="Select Zip File" readonly>
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-file-archive"></i>
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="column"><a id="SelectZip" class="button is-fullwidth is-warning is-small">Browse</a>
-                    </div>
-                </div>
-                <div class="columns is-mobile">
-                    <div class="column is-9">
-                        <div class="field">
-                            <p class="control has-icons-left">
-                                <input id="UnZipFileLocation" class="input is-small" type="text"
-                                    placeholder="Select Output Destination" readonly>
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-folder"></i>
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <a id="SelectUnZip" class="button is-fullwidth is-warning is-small">Set</a>
-                    </div>
-                </div>
-                <div class="columns is-mobile">
-                    <div class="column is-9">
-                        <a id="ExtractZip" class="button is-fullwidth is-success is-small">Extract</a></div>
-                    <div class="column">
-                        <button id="Reset" class="button is-danger is-outlined is-small is-fullwidth">
-                            <span>Reset</span>
-                            <span class="icon is-small">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </button>
-                    </div>
-                </div>
+                <section id="ss-source"></section>
+                <section id="ss-destination"></section>
+                <section id="ss-submit"></section>
             </div>
         </section>
     </div>
     <!-- Form End -->
     <!-- Footer -->
-    <footer class="footer footer-vh has-background-grey-lighter has-text-grey-darker">
-        <div class="columns is-mobile ml-5 mr-5 is-vcentered">
-            <div class="column is-1">
-                <button id="OpenLog" class="button is-small is-text">
-                    <span class="icon is-small">
-                        <i class="fas fa-file-alt"></i>
-                    </span>
-                    <span>Log</span>
-                </button>
-            </div>
-            <div class="column is-11 ml-5">
-                <p id="Messages" class="is-size-7"></p>
-            </div>
-        </div>
-    </footer>
+    <footer id="ss-footer" class="footer footer-vh has-background-grey-lighter has-text-grey-darker"></footer>
     <!-- Footer End -->
     <!-- Sticky Footer End -->
-    <script>
+
+    <script type="text/babel">
         'use strict';
         require('./js/renderer.js');
+        
+        const { ipcRenderer } = require('electron');
+
+        class Header extends React.Component {
+            render() {
+                return (
+                    <div class="container">
+                        <div class="columns is-mobile">
+                            <div class="column is-12">
+                                <div class="control">
+                                    <h1 id="ProductName" class="title is-4">Screen Sort</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        class Source extends React.Component {
+            onBrowse() {
+                console.log("Browse Button Clicked")
+                ipcRenderer.send('open-dialog')
+            }
+
+            render() {
+                return (
+                    <div class="columns is-mobile">
+                        <div class="column is-9">
+                            <div class="field">
+                                <p class="control has-icons-left">
+                                    <input id="ZipFileLocation" class="input is-small" type="text" placeholder="Select Zip File" readonly />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-file-archive"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="column"><a id="SelectZip" class="button is-fullwidth is-warning is-small" onClick={this.onBrowse}>Browse</a>
+                        </div>
+                    </div>
+
+                )
+            }
+        }
+
+        class Destination extends React.Component {
+            onSet() {
+                console.log("Browse Button Clicked")
+                ipcRenderer.send('open-dest-dialog')
+            }
+
+            onOpenFolder() {
+                console.log("Show Folder Button Clicked");
+                ipcRenderer.send('show-folder');
+            }
+
+            render() {
+                return (
+                    <div class="columns is-mobile">
+                        <div class="column is-9">
+                            <div class="field">
+                                <p class="control has-icons-left">
+                                    <input id="UnZipFileLocation" class="input is-small" type="text" placeholder="Select Output Destination" readonly onClick={this.onOpenFolder} />
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-folder"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <a id="SelectUnZip" class="button is-fullwidth is-warning is-small" onClick={this.onSet}>Set</a>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        class Submit extends React.Component {
+            onExtract() {
+                console.log("Extract Button Clicked")
+                ipcRenderer.send('extract-zip')
+            }
+
+            onReset() {
+                console.log("Reset Button Clicked")
+                ipcRenderer.send('reset-app')
+            }
+
+            render() {
+                return (
+                    <div class="columns is-mobile">
+                        <div class="column is-9">
+                            <a id="ExtractZip" class="button is-fullwidth is-success is-small" onClick={this.onExtract}>Extract</a>
+                        </div>
+                        <div class="column">
+                            <button id="Reset" class="button is-danger is-outlined is-small is-fullwidth" onClick={this.onReset}>
+                                <span>Reset</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        class Footer extends React.Component {
+            openLog() {
+                ipcRenderer.send('open-log');
+            }
+
+            render() {
+                return (
+                    <div class="columns is-mobile ml-5 mr-5 is-vcentered">
+                        <div class="column is-1">
+                            <button id="OpenLog" class="button is-small is-text" onClick={this.openLog}>
+                                <span class="icon is-small">
+                                    <i class="fas fa-file-alt"></i>
+                                </span>
+                                <span>Log</span>
+                            </button>
+                        </div>
+                        <div class="column is-11 ml-5">
+                            <p id="Messages" class="is-size-7"></p>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Header />, document.getElementById('ss-header'));
+        ReactDOM.render(<Source />, document.getElementById('ss-source'));
+        ReactDOM.render(<Destination />, document.getElementById('ss-destination'));
+        ReactDOM.render(<Submit />, document.getElementById('ss-submit'));
+        ReactDOM.render(<Footer />, document.getElementById('ss-footer'));
     </script>
+
+    <!-- <script>
+        'use strict';
+        require('./js/renderer.js');
+    </script> -->
 </body>
 
 </html>
