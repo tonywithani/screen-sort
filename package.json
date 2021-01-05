@@ -1,7 +1,7 @@
 {
   "name": "screen-sort",
   "productName": "Screen Sort",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Sorts ad screens based on size.",
   "main": "src/index.js",
   "scripts": {
@@ -17,15 +17,8 @@
   "build": {
     "appId": "com.tonywithani.screen-sort",
     "win": {
-      "target": "NSIS",
-      "icon": "./src/img/Icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "installerSidebar": "./src/img/InstallerSideBar.bmp"
+      "icon": "./src/img/Icon.png",
+      "target": "portable"
     }
   },
   "keywords": [],
