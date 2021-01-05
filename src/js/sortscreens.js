@@ -68,13 +68,13 @@ class SortScreens {
       let stats = fs.statSync(current_path);
 
       if (!stats.isDirectory()) {
-        if (file.includes("1920x1080")) {
+        if (file.includes("1920x1080") || file.includes("FF")) {
           new_path = path.join(this.dest, "ff", file);
           fs.renameSync(current_path, new_path);
-        } else if (file.includes("1740x1074")) {
+        } else if (file.includes("1740x1074") || file.includes("SQZ")) {
           new_path = path.join(this.dest, "sqz", file);
           fs.renameSync(current_path, new_path);
-        } else if (file.includes("1214x478")) {
+        } else if (file.includes("1214x478") || file.includes("MVB")) {
           new_path = path.join(this.dest, "mini", file);
           fs.renameSync(current_path, new_path);
         } else {
